@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) WIDE IO LTD 2014-2016
+#!/usr/bin/env python
+# ############################################################################
+# |W|I|D|E|I|O|L|T|D|W|I|D|E|I|O|L|T|D|W|I|D|E|I|O|L|T|D|W|I|D|E|I|O|L|T|D|
+# Copyright (c) WIDE IO LTD
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -10,7 +12,7 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. Neither the name of the WIDE IO LTD nor the names of its contributors
+# 3. Neither the name of the University nor the names of its contributors
 #    may be used to endorse or promote products derived from this software
 #    without specific prior written permission.
 #
@@ -25,48 +27,37 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-
-"""
-This is the distribution setup for WIDE IO MIMEJSON library.
-"""
-
+# |D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|
+# ############################################################################
 import os
+import sys
 
-from setuptools import setup
+from wideio import llapi
 
-# DO NOT USE SCRIPT IN THE TWO FOLLOWING DEFINITIONS AS THESE LINES ARE REUSED IN OTHER LANGUAGES
-module = "wideio"
-VERSION_FILE = "wideio/VERSION"
+sys.path.append(os.getcwd())
 
-with open(os.path.join(os.path.dirname(__file__), VERSION_FILE), 'r') as fd:
-    version = fd.read()
 
-if not version:
-    version = "0.0.0"
-
-setup(
-    name=module,
-    version=version,
-    description='WIDE IO Api Client',
-    author='WIDE IO LTD',
-    author_email='support@wide.io',
-    url='https://github.com/wideioltd/wideio/',
-    license='BSD',
-    classifiers=(
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: Implementation :: CPython',
-    ),
-    packages=[module],
-    install_requires=["requests"],
-    include_package_data=True,
-    package_dir={module: module},
-    package_data={
-        '': ['LICENSE'],
-        module: ['VERSION']
-    }
-)
+def not_yet_a_test_0():
+    a = llapi.Api()
+    a.collections.science.algorithm.schema()
+    LA = a.collections.science.algorithm.list()
+    a0 = a.collections.science.algorithm.get(a.collections, id=LA[0]["id"])
+    print a0.name
+    print "a0", a0
+    print "a0._dict__d", a0._dict__d, type(a0._dict__d)
+    print "a0.__dict__", a0.__dict__()
+    print dir(a0)
+    print "a0.image", a0.image
+    print "a0", a0
+    print a0.name
+    print dir(a0)
+    i0 = a0.image
+    print "i0", i0
+    print i0.name
+    print "adding request"
+    print a.collections.compute.execrequest.add(
+        dict(algorithm=a0.id,
+             parameters={'a': 2},
+             inputs={'b': 3}
+             )
+    )
