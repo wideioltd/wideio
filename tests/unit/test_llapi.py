@@ -29,12 +29,7 @@
 # SUCH DAMAGE.
 # |D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|
 # ############################################################################
-import os
-import sys
-
 from wideio import llapi
-
-sys.path.append(os.getcwd())
 
 
 def not_yet_a_test_0():
