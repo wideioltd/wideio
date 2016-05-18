@@ -18,7 +18,8 @@ COMMAND_ALIASES = {
     'get': 'view'
 }
 
-if __name__ == "__main__":
+
+def main():
     a = llapi.Api()
     fqmdl = a.collections._aliases.get(sys.argv[1], sys.argv[1])
     app = fqmdl.split("/")[0]
@@ -40,3 +41,7 @@ if __name__ == "__main__":
     # TODO: need to validate and parse args
     res = meth(**kwargs)
     print json.dumps(res, indent=2)
+
+
+if __name__ == "__main__":
+    main()

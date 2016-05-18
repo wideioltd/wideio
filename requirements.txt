@@ -3,3 +3,4 @@ py.test
 behave
 requests
 mimejson
+betamax

@@ -9,10 +9,12 @@ of MIMEJSON is likely to evolve through iteration.
 import os
 from . import llapi
 from . import hlapi
+from .__main__ import main as __main__
+
 
 try:
     __version__ = open(os.path.join(os.path.dirname(__file__), "VERSION"), "r").read()
 except:
     __version__ = "N/A"
 
-__all__ = ('llapi', 'hlapi', '__version__')
+__all__ = ('llapi', 'hlapi', '__version__', '__main__')

@@ -68,5 +68,10 @@ setup(
     package_data={
         '': ['LICENSE'],
         module: ['VERSION']
+    },
+    entry_points={
+        'console_scripts': [
+            'wideio = wideio:__main__'
+        ],
     }
 )
