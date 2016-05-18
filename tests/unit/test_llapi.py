@@ -29,30 +29,58 @@
 # SUCH DAMAGE.
 # |D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|D|O|N|O|T|R|E|M|O|V|E|!|
 # ############################################################################
+from unittest import TestCase
+
+from betamax import Betamax
+from requests import Session
 from wideio import llapi
 
+with Betamax.configure() as config:
+    config.cassette_library_dir = 'tests/fixtures/cassettes_v0'
 
-def not_yet_a_test_0():
-    a = llapi.Api()
-    a.collections.science.algorithm.schema()
-    LA = a.collections.science.algorithm.list()
-    a0 = a.collections.science.algorithm.get(a.collections, id=LA[0]["id"])
-    print a0.name
-    print "a0", a0
-    print "a0._dict__d", a0._dict__d, type(a0._dict__d)
-    print "a0.__dict__", a0.__dict__()
-    print dir(a0)
-    print "a0.image", a0.image
-    print "a0", a0
-    print a0.name
-    print dir(a0)
-    i0 = a0.image
-    print "i0", i0
-    print i0.name
-    print "adding request"
-    print a.collections.compute.execrequest.add(
-        dict(algorithm=a0.id,
-             parameters={'a': 2},
-             inputs={'b': 3}
-             )
-    )
+
+class TestWIDEIOAPI(TestCase):
+    def setUp(self):
+        self.session = Session()
+
+    def test_read_algorithm_schema(self):
+        with Betamax(self.session) as vcr:
+            vcr.use_cassette('user_reflect_algorithm')
+            a = llapi.Api(session=self.session)
+            a.collections.science.algorithm.schema()
+
+    def test_read_algorithm_list(self):
+        with Betamax(self.session) as vcr:
+            vcr.use_cassette('user_list_algorithm')
+            a = llapi.Api(session=self.session)
+            a.collections.science.algorithm.list()
+
+    def test_get_algorithm(self):
+        with Betamax(self.session) as vcr:
+            vcr.use_cassette('user_get_algorithm')
+            a = llapi.Api(session=self.session)
+            LA = a.collections.science.algorithm.list()
+            a0 = a.collections.science.algorithm.get(a.collections, id=LA[0]["id"])
+            assert hasattr(a0, "name")
+            assert not hasattr(a0, "fldfal name")
+            assert isinstance(a0.__dict__(), dict)
+
+            # print "a0", a0
+            # print "a0._dict__d", a0._dict__d, type(a0._dict__d)
+            # print "a0.__dict__", a0.__dict__()
+            # print dir(a0)
+            # assert(False)
+            # print "a0.image", a0.image
+            # print "a0", a0
+            #print a0.name
+            #print dir(a0)
+            #i0 = a0.image
+            #print "i0", i0
+            #print i0.name
+            #print "adding request"
+            #print a.collections.compute.execrequest.add(
+            #    dict(algorithm=a0.id,
+            #         parameters={'a': 2},
+            #         inputs={'b': 3}
+            #         )
+            #)

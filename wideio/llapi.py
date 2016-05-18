@@ -103,7 +103,8 @@ class ServerErrorException(ProxyException):
 
 
 class WIDEIOClient(object):
-    def __init__(self, config):
+    def __init__(self, config, session=None):
+        self.session = session or requests
         self.config = config
         self.result = None
         self.auth = (
@@ -118,7 +119,7 @@ class WIDEIOClient(object):
             'Accept': 'application/json'
         }
 
-        self.mjson = MIMEJSON()
+        self.mjson = MIMEJSON(session=self.session)
         self.mjson.transport = self
         self.verbose = int(os.environ.get("WIO_API_VERBOSITY", self.config.get("verbose", 0)))
         self.verify = bool(int(os.environ.get("WIO_API_SSL_VERIFY", True)))
@@ -144,13 +145,13 @@ class WIDEIOClient(object):
         logging.debug(self, "POST( URL=%s arg=%r data_arg=%s auth=%r files=%r)" % t)
         # print "POST( URL=%s arg=%r data_arg=%s auth=%r files=%r)" % t
 
-        self.result = requests.post(self.config["site_url"] + url,
-                                    data=args,
-                                    auth=self.auth,
-                                    files=files,
-                                    verify=self.verify,
-                                    headers=self.headers
-                                    )
+        self.result = self.session.post(self.config["site_url"] + url,
+                                        data=args,
+                                        auth=self.auth,
+                                        files=files,
+                                        verify=self.verify,
+                                        headers=self.headers
+                                        )
         t = self.result.text
 
         if not self.result.ok:
@@ -437,6 +438,6 @@ class ProxyDatabase():
 
 
 class Api():
-    def __init__(self, config=None):
-        self.client = WIDEIOClient((config if config else CONFIG))
+    def __init__(self, config=None, session=None):
+        self.client = WIDEIOClient((config if config else CONFIG), session=session)
         self.collections = ProxyDatabase(self.client)
